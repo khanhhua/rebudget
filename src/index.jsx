@@ -5,13 +5,13 @@ import thunk from 'redux-thunk';
 import { createStore, combineReducers,
  applyMiddleware, bindActionCreators } from 'redux';
 
-import request from 'superagent';
-
 import FakeXMLHttpRequest from 'fake-xml-http-request';
 import RouteRecognizer from 'route-recognizer';
 window.FakeXMLHttpRequest = FakeXMLHttpRequest;
 window.RouteRecognizer = RouteRecognizer;
 
+import {addCategory, addSpending, selectCategory} from './actions';
+import {ADD_CATEGORY, ADD_SPENDING, SELECT_CATEGORY} from './actions/types';
 
 /*---------------------------------------------------------
 / MIDDLEWARES
@@ -32,7 +32,7 @@ const actionLogger = ({ dispatch, getState }) => (next) => (action) => {
 const categoriesReducer = (state=[], {type, status, params}) => {
   let newState;
 
-  if (type === 'ADD_CATEGORY' && status === 'success') {
+  if (type === ADD_CATEGORY && status === 'success') {
     let {category} = params;
 
     newState = state.concat(category);
@@ -44,7 +44,7 @@ const categoriesReducer = (state=[], {type, status, params}) => {
 const spendingsReducer = (state=[], {type, status, params}) => {
   let newState;
 
-  if (type === 'ADD_SPENDING' && status === 'success') {
+  if (type === ADD_SPENDING && status === 'success') {
     let {spending} = params;
 
     newState = state.concat(spending);
@@ -71,7 +71,7 @@ const reducers = combineReducers({
   networkActivity: networkActivityReducer,
   ui: (state = {}, {type, params}) => {
     let newState;
-    if (type === 'SELECT_CATEGORY') {
+    if (type === SELECT_CATEGORY) {
       let {categoryId} = params;
       newState = Object.assign({}, state, {selectedCategoryId: categoryId});
     }
@@ -81,49 +81,6 @@ const reducers = combineReducers({
 });
 
 const store = createStore(reducers, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
-
-/*---------------------------------------------------------
-/ ACTIONS
-/--------------------------------------------------------*/
-const addCategory = (label) => (dispatch, getState) => {
-  // dispatch({ type: 'ADD_CATEGORY', params: {category} });
-  dispatch({ type: 'ADD_CATEGORY', status: 'pending' });
-
-  let category = {label};
-
-  request.post('/api/categories').send({category}).end((error, response) => {
-    if (error) {
-      return dispatch({ type: 'ADD_CATEGORY', status: 'error', params: {error} });
-    }
-    let data = response.body;
-
-    dispatch({ type: 'ADD_CATEGORY', status: 'success', params: {category: data.category} });
-  })
-};
-const addSpending = (spending) => (dispatch, getState) => {
-  dispatch({ type: 'ADD_SPENDING', status: 'pending' });
-
-  let entry = Object.assign({type: 'expense'}, spending);
-
-  request.post('/api/entries').send({entry}).end((error, response) => {
-    if (error) {
-      return dispatch({ type: 'ADD_SPENDING', status: 'error', params: {error} });
-    }
-    let data = response.body;
-    
-    dispatch({ type: 'ADD_SPENDING', status: 'success', params: {spending: data.entry} });
-  })
-};
-
-const selectCategory = (categoryId) => {
-  return {
-    type: 'SELECT_CATEGORY',
-    params: {
-      categoryId
-    }
-  };
-};
-
 
 const filterSpendingByCategory = (spendings, categoryId) => {
   if (!categoryId) {
