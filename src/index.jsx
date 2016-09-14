@@ -56,7 +56,7 @@ const spendingsReducer = (state=[], {type, status, params}) => {
 const networkActivityReducer = (state=[], {type, status, params}) => {
   let newState;
   if (status === 'error') {
-    newState = Object.assign({type, params}, state);
+    newState = Object.assign({}, state, {type, params});
 
     return newState;
   }
@@ -68,24 +68,36 @@ const networkActivityReducer = (state=[], {type, status, params}) => {
 const reducers = combineReducers({
   categories: categoriesReducer,
   spendings: spendingsReducer,
-  networkActivity: networkActivityReducer
+  networkActivity: networkActivityReducer,
+  ui: (state = {}, {type, params}) => {
+    let newState;
+    if (type === 'SELECT_CATEGORY') {
+      let {categoryId} = params;
+      newState = Object.assign({}, state, {selectedCategoryId: categoryId});
+    }
+
+    return newState || state;
+  }
 });
 
-const store = createStore(reducers, { categories: ['Default'] }, applyMiddleware(actionLogger, thunk));
+const store = createStore(reducers, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
 
 /*---------------------------------------------------------
 / ACTIONS
 /--------------------------------------------------------*/
-const addCategory = (category) => (dispatch, getState) => {
+const addCategory = (label) => (dispatch, getState) => {
   // dispatch({ type: 'ADD_CATEGORY', params: {category} });
   dispatch({ type: 'ADD_CATEGORY', status: 'pending' });
+
+  let category = {label};
 
   request.post('/api/categories').send({category}).end((error, response) => {
     if (error) {
       return dispatch({ type: 'ADD_CATEGORY', status: 'error', params: {error} });
     }
-    
-    dispatch({ type: 'ADD_CATEGORY', status: 'success', params: {category} });
+    let data = response.body;
+
+    dispatch({ type: 'ADD_CATEGORY', status: 'success', params: {category: data.category} });
   })
 };
 const addSpending = (spending) => (dispatch, getState) => {
@@ -103,13 +115,31 @@ const addSpending = (spending) => (dispatch, getState) => {
   })
 };
 
+const selectCategory = (categoryId) => {
+  return {
+    type: 'SELECT_CATEGORY',
+    params: {
+      categoryId
+    }
+  };
+};
+
+
+const filterSpendingByCategory = (spendings, categoryId) => {
+  if (!categoryId) {
+    return spendings;
+  }
+
+  return spendings.filter(item => item.category === categoryId);
+};
+
 /*---------------------------------------------------------
 / UI
 /--------------------------------------------------------*/
 
 const AppComponent = (props) => {
-  const {addCategory, addSpending, networkActivity} = props;
-  const {categories, spendings} = props;
+  const {addCategory, addSpending, selectCategory} = props;
+  const {categories, spendings, selectedCategoryId, networkActivity} = props;
 
   return (
     <div className="container">
@@ -127,36 +157,71 @@ const AppComponent = (props) => {
           </div>
           )}
           <div>
-            <button onClick={()=>addCategory('Housing')}>Add category</button>
-            <button onClick={()=>addSpending({ category:'Housing', amount:1200 })}>Add spending</button>
+            
           </div>
         </div>
       </div>
       <div className="row">
-        <div className="col-xs-12 col-sm-3">
-          <h2>Categories</h2>
-          <ol>
-          {categories.map((item, i) => (<li key={i}>{item}</li>))}
-          </ol>
+        <div className="col-xs-12 col-sm-5">
+          <CategoryListComponent {...{categories, addCategory}} onCategoryClick={selectCategory}></CategoryListComponent>          
         </div>
-        <div className="col-xs-12 col-sm-9">
-          <h2>Spendings</h2>
-          <ol>
-          {spendings.map((item) => (<li key={item.id}>{item.amount}</li>))}
-          </ol>
+        <div className="col-xs-12 col-sm-7">
+          <SpendingListComponent {...{spendings: filterSpendingByCategory(spendings, selectedCategoryId), addSpending}}></SpendingListComponent>
         </div>
       </div>
     </div>
   );
 };
 
+const CategoryListComponent = (props) => {
+  // I am no fan of component life cycle hooks
+  const { categories, addCategory } = props;
+  const { onCategoryClick } = props;
+
+  return (
+    <div className="panel panel-default">
+      <div className="panel-heading">
+        <button className="pull-right" onClick={()=>addCategory('Housing')}>Add category</button>
+        Categories
+      </div>
+      <div className="panel-body">
+        <ol>
+        {categories.map((item) => (
+          <li key={item.id} onClick={onCategoryClick.bind(undefined, item.id)}>{item.label}</li>
+        ))}
+        </ol>
+      </div>
+    </div>
+  );
+};
+
+const SpendingListComponent = (props) => {
+
+  const { spendings, addSpending } = props;
+
+  return (
+    <div className="panel panel-default">
+      <div className="panel-heading">
+        <button className="pull-right" onClick={()=>addSpending({ category: 'cat00', amount: 300 })}>Add spending</button>
+        Spendings
+      </div>
+      <div className="panel-body">
+        <ol>
+        {spendings.map((item) => (<li key={item.id}>{item.amount}</li>))}
+        </ol>
+      </div>
+    </div>
+  );
+};
+
 const render = (store) => () => {
-  const {categories, spendings, networkActivity} = store.getState();
+  const {categories, spendings, networkActivity, ui} = store.getState();
+  const {selectedCategoryId} = ui;
 
   ReactDOM.render(
     <AppComponent 
-        {...{categories, spendings, networkActivity}}
-        {...bindActionCreators({addCategory, addSpending}, store.dispatch)}>
+        {...{categories, spendings, networkActivity, selectedCategoryId}}
+        {...bindActionCreators({addCategory, addSpending, selectCategory}, store.dispatch)}>
     </AppComponent>, 
     document.getElementById('root')
   );
