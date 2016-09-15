@@ -11,12 +11,20 @@ const filterSpendingByCategory = (spendings, categoryId) => {
 };
 
 const AppComponent = (props) => {
-  const {addCategory, addSpending, selectCategory} = props;
-  const {categories, spendings, selectedCategoryId, networkActivity} = props;
+  const {addCategory, addSpending, selectCategory, loginFacebook} = props;
+  const {currentUser, categories, spendings, selectedCategoryId, networkActivity} = props;
 
   return (
     <div className="container">
-      <h1>The React Fucking Redux works!</h1>
+      <div className="page-header">
+        <h1>The React Fucking Redux works!</h1>
+
+        {!currentUser.fbId &&
+        <button className="btn btn-primary" onClick={loginFacebook.bind(undefined)}>
+          <i className="fa fa-facebook-official" /> Login
+        </button>}
+      </div>
+
       <div className="row">
         <div className="col-xs-12">
           {networkActivity && (
@@ -30,7 +38,7 @@ const AppComponent = (props) => {
           </div>
           )}
           <div>
-            
+
           </div>
         </div>
       </div>

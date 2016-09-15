@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
 import { Provider, connect } from 'react-redux';
 
-import { createStore, combineReducers, applyMiddleware, bindActionCreators } from 'redux';
+import { createStore, applyMiddleware, bindActionCreators } from 'redux';
 
 
 /*---------------------------------------------------------
 / ACTIONS
 /--------------------------------------------------------*/ 
-import {addCategory, addSpending, selectCategory} from './actions';
+import {addCategory, addSpending, selectCategory, loginFacebook} from './actions';
 
 /*---------------------------------------------------------
 / UI
@@ -32,13 +32,13 @@ import {default as rootReducer} from './reducers';
 const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
 
 const mapStateToProps = (state, ownProps) => {
-  const {categories, spendings, networkActivity, ui} = state;
+  const {currentUser, categories, spendings, networkActivity, ui} = state;
 
-  return {categories, spendings, networkActivity, selectedCategoryId: ui.selectedCategoryId};
+  return {currentUser, categories, spendings, networkActivity, selectedCategoryId: ui.selectedCategoryId};
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({addCategory, addSpending, selectCategory}, dispatch);
+  return bindActionCreators({addCategory, addSpending, selectCategory, loginFacebook}, dispatch);
 }
 
 const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);

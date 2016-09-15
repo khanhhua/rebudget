@@ -24,8 +24,12 @@ module.exports = {
    filename: 'bundle.js'
  },
  devServer: {
-   contentBase: './dist',
-   hot: true
+   contentBase: ['./dist', './src'],
+   hot: true,
+   proxy: {
+     '/api/*': 'http://localhost:6543',
+     '/auth/*': 'http://localhost:6543',
+   }
  },
  plugins: [
    new webpack.HotModuleReplacementPlugin()
