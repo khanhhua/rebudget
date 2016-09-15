@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 
 import { createStore, combineReducers, applyMiddleware, bindActionCreators } from 'redux';
 
@@ -31,22 +31,23 @@ import {default as rootReducer} from './reducers';
 /--------------------------------------------------------*/ 
 const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
 
-const App = (props) => {
-  const {store} = props;
-  const {categories, spendings, networkActivity, ui} = store.getState();
-  const {selectedCategoryId} = ui;
+const mapStateToProps = (state, ownProps) => {
+  const {categories, spendings, networkActivity, ui} = state;
 
-  return (
-    <AppComponent 
-      {...{categories, spendings, networkActivity, selectedCategoryId}}
-      {...bindActionCreators({addCategory, addSpending, selectCategory}, store.dispatch)}>
-    </AppComponent>
-  );
+  return {categories, spendings, networkActivity, selectedCategoryId: ui.selectedCategoryId};
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({addCategory, addSpending, selectCategory}, dispatch);
+}
+
+const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
 
 const render = (store) => () => {
   ReactDOM.render(
-    <App store={store} />,
+    <Provider store={store}>
+      <App />
+    </Provider>,
     document.getElementById('root')
   );
 }
