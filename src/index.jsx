@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 
-import { createStore, combineReducers,
- applyMiddleware, bindActionCreators } from 'redux';
+import { createStore, combineReducers, applyMiddleware, bindActionCreators } from 'redux';
+
 
 /*---------------------------------------------------------
 / ACTIONS
@@ -30,15 +31,22 @@ import {default as rootReducer} from './reducers';
 /--------------------------------------------------------*/ 
 const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
 
-const render = (store) => () => {
+const App = (props) => {
+  const {store} = props;
   const {categories, spendings, networkActivity, ui} = store.getState();
   const {selectedCategoryId} = ui;
 
-  ReactDOM.render(
+  return (
     <AppComponent 
-        {...{categories, spendings, networkActivity, selectedCategoryId}}
-        {...bindActionCreators({addCategory, addSpending, selectCategory}, store.dispatch)}>
-    </AppComponent>, 
+      {...{categories, spendings, networkActivity, selectedCategoryId}}
+      {...bindActionCreators({addCategory, addSpending, selectCategory}, store.dispatch)}>
+    </AppComponent>
+  );
+};
+
+const render = (store) => () => {
+  ReactDOM.render(
+    <App store={store} />,
     document.getElementById('root')
   );
 }
