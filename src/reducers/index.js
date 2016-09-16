@@ -5,10 +5,10 @@ window.RouteRecognizer = RouteRecognizer;
 
 import {combineReducers} from 'redux';
 
-import {default as categoriesReducer} from './categories-reducer';
-import {default as spendingsReducer} from './spendings-reducer';
-import {default as networkActivityReducer} from './network-activity-reducer';
-import {default as uiReducer} from './ui-reducer';
+import categoriesReducer from './categories-reducer';
+import spendingsReducer from './spendings-reducer';
+import networkActivityReducer from './network-activity-reducer';
+import uiReducer from './ui-reducer';
 
 const rootReducer = combineReducers({
   categories: categoriesReducer,

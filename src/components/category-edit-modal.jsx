@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { formFactory } from '../utility';
+// import { formFactory } from '../utility';
 
-const CategoryEditModal = (state={}, props) => {
+const CategoryEditModal = (props) => {
+  let state = {};
+
   const mode = 'create';
   const {addCategory} = props;
 
@@ -16,7 +18,8 @@ const CategoryEditModal = (state={}, props) => {
     console.log(`[CategoryEditModal.onSave] Category label:`, state.label);
 
     const {label} = state;
-    addCategory(label);
+    let ret = addCategory(label);
+    console.debug(ret);
   };
   return (
     <div>
@@ -40,4 +43,4 @@ const CategoryEditModal = (state={}, props) => {
   );
 };
 
-export default formFactory(CategoryEditModal);
+export default CategoryEditModal;

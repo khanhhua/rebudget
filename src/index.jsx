@@ -11,7 +11,7 @@ import { createStore, combineReducers, applyMiddleware, bindActionCreators } fro
 /*---------------------------------------------------------
 / ACTIONS
 /--------------------------------------------------------*/
-import {showCategoryModal, addCategory, addSpending, selectCategory} from './actions';
+import {showCategoryModal, closeModal, addCategory, addSpending, selectCategory} from './actions';
 
 /*---------------------------------------------------------
 / UI
@@ -58,8 +58,13 @@ const ConnectedModal = connect((state) => {
   const children = React.createElement(connectedModalType);
   const isOpen = state.ui && !!state.ui.modal;
 
-  return {isOpen, children};
-}, mapDispatchToProps)(Modal);
+  return {
+    isOpen,
+    children
+  };
+}, (dispatch) => {
+  return bindActionCreators({onRequestClose: () => ({ type: 'core/CLOSE_MODAL' })}, dispatch);
+})(Modal);
 
 const render = (store) => () => {
   ReactDOM.render(
