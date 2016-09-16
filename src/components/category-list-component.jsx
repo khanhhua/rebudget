@@ -2,13 +2,14 @@ import React from 'react';
 
 const CategoryListComponent = (props) => {
   // I am no fan of component life cycle hooks
-  const { categories, addCategory } = props;
+  const { categories } = props;
+  const { showCategoryModal, addCategory } = props;
   const { onCategoryClick } = props;
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <button className="pull-right" onClick={()=>addCategory('Housing')}>Add category</button>
+        <button className="pull-right" onClick={showCategoryModal.bind(undefined)}>Add category</button>
         Categories
       </div>
       <div className="panel-body">

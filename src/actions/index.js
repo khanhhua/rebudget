@@ -1,9 +1,15 @@
 import request from 'superagent';
-import {ADD_CATEGORY, ADD_SPENDING, SELECT_CATEGORY} from './types';
+import {ADD_CATEGORY, ADD_SPENDING, SELECT_CATEGORY, SHOW_MODAL} from './types';
 
 /*---------------------------------------------------------
 / ACTIONS
 /--------------------------------------------------------*/
+export const showCategoryModal = () => {
+  return {
+    type: SHOW_MODAL, params: { modalModule: './components/category-edit-modal' }
+  };
+};
+
 export const addCategory = (label) => (dispatch, getState) => {
   // dispatch({ type: ADD_CATEGORY, params: {category} });
   dispatch({ type: ADD_CATEGORY, status: 'pending' });
@@ -29,7 +35,7 @@ export const addSpending = (spending) => (dispatch, getState) => {
       return dispatch({ type: ADD_SPENDING, status: 'error', params: {error} });
     }
     let data = response.body;
-    
+
     dispatch({ type: ADD_SPENDING, status: 'success', params: {spending: data.entry} });
   })
 };

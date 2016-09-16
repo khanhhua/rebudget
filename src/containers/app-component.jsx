@@ -11,7 +11,7 @@ const filterSpendingByCategory = (spendings, categoryId) => {
 };
 
 const AppComponent = (props) => {
-  const {addCategory, addSpending, selectCategory} = props;
+  const {showCategoryModal, addCategory, addSpending, selectCategory} = props;
   const {categories, spendings, selectedCategoryId, networkActivity} = props;
 
   return (
@@ -29,14 +29,11 @@ const AppComponent = (props) => {
             </pre>
           </div>
           )}
-          <div>
-            
-          </div>
         </div>
       </div>
       <div className="row">
         <div className="col-xs-12 col-sm-5">
-          <CategoryListComponent {...{categories, addCategory}} onCategoryClick={selectCategory} />
+          <CategoryListComponent {...{categories, showCategoryModal, addCategory}} onCategoryClick={selectCategory} />
         </div>
         <div className="col-xs-12 col-sm-7">
           <SpendingListComponent {...{spendings: filterSpendingByCategory(spendings, selectedCategoryId), addSpending}} />

@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
+
 import thunk from 'redux-thunk';
 import { Provider, connect } from 'react-redux';
 
@@ -8,17 +10,18 @@ import { createStore, combineReducers, applyMiddleware, bindActionCreators } fro
 
 /*---------------------------------------------------------
 / ACTIONS
-/--------------------------------------------------------*/ 
-import {addCategory, addSpending, selectCategory} from './actions';
+/--------------------------------------------------------*/
+import {showCategoryModal, addCategory, addSpending, selectCategory} from './actions';
 
 /*---------------------------------------------------------
 / UI
-/--------------------------------------------------------*/ 
+/--------------------------------------------------------*/
 import {AppComponent} from './containers';
+import {CategoryEditModal} from './components';
 
 /*---------------------------------------------------------
 / MIDDLEWARES
-/--------------------------------------------------------*/ 
+/--------------------------------------------------------*/
 import {actionLogger} from './middlewares';
 
 /*---------------------------------------------------------
@@ -28,7 +31,7 @@ import {default as rootReducer} from './reducers';
 
 /*---------------------------------------------------------
 / STORE
-/--------------------------------------------------------*/ 
+/--------------------------------------------------------*/
 const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
 
 const mapStateToProps = (state, ownProps) => {
@@ -38,15 +41,33 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({addCategory, addSpending, selectCategory}, dispatch);
+  return bindActionCreators({showCategoryModal, addCategory, addSpending, selectCategory}, dispatch);
 }
 
 const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+const ConnectedModal = connect((state) => {
+  const modalModule = (state.ui && state.ui.modal && state.ui.modal.modalModule)?state.ui.modal.modalModule:null;
+
+  if (!modalModule) {
+    return {isOpen: false};
+  }
+
+  // TODO modalModule should be current working dir agnostic.
+  const modelType = require(modalModule).default;
+  const connectedModalType = connect((state) => ({}), mapDispatchToProps)(modelType);
+  const children = React.createElement(connectedModalType);
+  const isOpen = state.ui && !!state.ui.modal;
+
+  return {isOpen, children};
+}, mapDispatchToProps)(Modal);
 
 const render = (store) => () => {
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <div>
+        <App />
+        <ConnectedModal />
+      </div>
     </Provider>,
     document.getElementById('root')
   );
