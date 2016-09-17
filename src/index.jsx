@@ -9,12 +9,12 @@ import { createStore, applyMiddleware, bindActionCreators } from 'redux';
 /*---------------------------------------------------------
 / ACTIONS
 /--------------------------------------------------------*/ 
-import {addCategory, addSpending, selectCategory, loginFacebook} from './actions';
+import { addCategory, addSpending, selectCategory, loginFacebook} from './actions';
 
 /*---------------------------------------------------------
 / UI
 /--------------------------------------------------------*/ 
-import {AppComponent} from './containers';
+import {AppComponent, SettingsComponent} from './containers';
 
 /*---------------------------------------------------------
 / MIDDLEWARES
@@ -29,7 +29,7 @@ import {default as rootReducer} from './reducers';
 /*---------------------------------------------------------
 / STORE
 /--------------------------------------------------------*/ 
-const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
+const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(thunk));
 
 const mapStateToProps = (state, ownProps) => {
   const {currentUser, categories, spendings, networkActivity, ui} = state;
@@ -46,7 +46,10 @@ const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
 const render = (store) => () => {
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <div>
+        <App />
+        <SettingsComponent />
+      </div>
     </Provider>,
     document.getElementById('root')
   );

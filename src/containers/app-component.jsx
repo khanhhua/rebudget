@@ -16,14 +16,25 @@ const AppComponent = (props) => {
 
   return (
     <div className="container">
-      <div className="page-header">
-        <h1>The React Fucking Redux works!</h1>
-
-        {!currentUser.fbId &&
-        <button className="btn btn-primary" onClick={loginFacebook.bind(undefined)}>
-          <i className="fa fa-facebook-official" /> Login
-        </button>}
-      </div>
+      <nav className="navbar navbar-default">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <div className="navbar-brand">Home Budget</div>
+          </div>
+          <ul className="nav navbar-nav navbar-right">
+            {currentUser.fbId &&
+            <li>
+              <a href="#">{currentUser.fbId}</a>
+            </li>
+            }
+          </ul>
+          {!currentUser.fbId &&
+          <button className="btn navbar-btn btn-primary pull-right" onClick={loginFacebook.bind(undefined)}>
+            <i className="fa fa-facebook-official" /> Login
+          </button>
+          }
+        </div>
+      </nav>
 
       <div className="row">
         <div className="col-xs-12">
