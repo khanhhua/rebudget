@@ -68,18 +68,22 @@ export const updateSettings = (settings) => (dispatch, getState) => {
 };
 
 export const addCategory = (label) => (dispatch, getState) => {
-  // dispatch({ type: ADD_CATEGORY, params: {category} });
   dispatch({ type: ADD_CATEGORY, status: 'pending' });
 
   let category = {label};
 
-  request.post('/api/categories').send({category}).end((error, response) => {
-    if (error) {
-      return dispatch({ type: ADD_CATEGORY, status: 'error', params: {error} });
-    }
-    let data = response.body;
+  return new Promise (resolve => {
+    request.post('/api/categories')
+      .set('x-access-key', '0')
+      .send(category).end((error, response) => {
+      if (error) {
+        return dispatch({ type: ADD_CATEGORY, status: 'error', params: {error} });
+      }
+      let data = response.body;
 
-    dispatch({ type: ADD_CATEGORY, status: 'success', params: {category: data.category} });
+      dispatch({ type: ADD_CATEGORY, status: 'success', params: {category: data.category} });
+      resolve();
+    });
   });
 };
 
@@ -88,7 +92,7 @@ export const addSpending = (spending) => (dispatch, getState) => {
 
   let entry = Object.assign({type: 'expense'}, spending);
 
-  request.post('/api/entries').send({entry}).end((error, response) => {
+  request.post('/api/entries').send(entry).end((error, response) => {
     if (error) {
       return dispatch({ type: ADD_SPENDING, status: 'error', params: {error} });
     }

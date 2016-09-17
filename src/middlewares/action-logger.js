@@ -3,11 +3,13 @@ const actionLogger = ({ dispatch, getState }) => (next) => (action) => {
   console.log(`action: `, typeof action === 'function'?'Resolving thunk':action);
   console.log(`prev state:`, getState());
   
-  next(action);
+  const nextAction = next(action);
   let nextState = getState();
 
   console.log(`current state:`, nextState);
   console.groupEnd();
+
+  return nextAction;
 };
 
 export default actionLogger;

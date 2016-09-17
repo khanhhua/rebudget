@@ -22,6 +22,7 @@ import {AppHeaderComponent} from './components';
 / MIDDLEWARES
 /--------------------------------------------------------*/ 
 import {actionLogger} from './middlewares';
+import {default as promiseResolver} from 'redux-promise';
 
 /*---------------------------------------------------------
 / REDUCERS and STORE
@@ -31,7 +32,7 @@ import {default as rootReducer} from './reducers';
 /*---------------------------------------------------------
 / STORE
 /--------------------------------------------------------*/ 
-const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(thunk));
+const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, promiseResolver, thunk));
 
 const Layout = (store) => (props) => {
   const {currentUser} = store.getState();
