@@ -5,6 +5,7 @@ import { Provider, connect } from 'react-redux';
 
 import { createStore, applyMiddleware, bindActionCreators } from 'redux';
 
+import { IndexRoute, Router, Route, Link, hashHistory } from 'react-router';
 
 /*---------------------------------------------------------
 / ACTIONS
@@ -15,6 +16,7 @@ import { addCategory, addSpending, selectCategory, loginFacebook} from './action
 / UI
 /--------------------------------------------------------*/ 
 import {AppComponent, SettingsComponent} from './containers';
+import {AppHeaderComponent} from './components';
 
 /*---------------------------------------------------------
 / MIDDLEWARES
@@ -39,22 +41,47 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({addCategory, addSpending, selectCategory, loginFacebook}, dispatch);
-}
+};
 
-const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+const Layout = (props) => {
+  const {currentUser} = store.getState();
+  const actions = bindActionCreators({loginFacebook}, store.dispatch);
 
-const render = (store) => () => {
+  return (
+    <div className="app">
+      <AppHeaderComponent {...{currentUser}} {...actions} />
+      {props.children}
+    </div>
+  );
+};
+
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+const Routable = (store) => (
+  <Router history={hashHistory}>
+    <Route path='/' component={Layout}>
+      <IndexRoute component={ConnectedApp} />
+      <Route path='settings' component={SettingsComponent} onEnter={(nextState, replace, cb) => {
+        const currentUser =  store.getState().currentUser;
+        if (currentUser.fbId) {
+          return cb();
+        }
+
+        replace('/');
+        cb();
+      }} />
+    </Route>
+  </Router>
+);
+
+const render = (store, routes) => () => {
   ReactDOM.render(
     <Provider store={store}>
-      <div>
-        <App />
-        <SettingsComponent />
-      </div>
+      {routes}
     </Provider>,
     document.getElementById('root')
   );
-}
+};
 
-const update = render(store);
+const update = render(store, Routable(store));
 store.subscribe(update);
 update();
