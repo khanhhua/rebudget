@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { CategoryListComponent, SpendingListComponent } from '../components';
-import { Router, Route, Link, browserHistory } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 const filterSpendingByCategory = (spendings, categoryId) => {
   if (!categoryId) {
@@ -46,4 +47,19 @@ const AppComponent = (props) => {
   );
 };
 
-export default AppComponent;
+/*---------------------------------------------------------
+ / ACTIONS
+ /--------------------------------------------------------*/
+import { addCategory, addSpending, selectCategory, loginFacebook} from '../actions';
+
+const mapStateToProps = (state, ownProps) => {
+  const {currentUser, categories, spendings, networkActivity, ui} = state;
+
+  return {currentUser, categories, spendings, networkActivity, selectedCategoryId: ui.selectedCategoryId};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({addCategory, addSpending, selectCategory, loginFacebook}, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
