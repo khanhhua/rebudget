@@ -17,31 +17,25 @@ const AppComponent = (props) => {
   const {currentUser, categories, spendings, selectedCategoryId, networkActivity} = props;
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-xs-12">
-          {networkActivity && (
-          <div className="alert warn">
-            <pre>
-              <ul>
-                <li>type: {networkActivity.type}</li>
-                <li>params: {JSON.stringify(networkActivity.params)}</li>
-              </ul>
-            </pre>
-          </div>
-          )}
-          <div>
-
-          </div>
+    <div className="row">
+      <div className="col-xs-12">
+        {networkActivity && (
+        <div className="alert warn">
+          <pre>
+            <ul>
+              <li>type: {networkActivity.type}</li>
+              <li>params: {JSON.stringify(networkActivity.params)}</li>
+            </ul>
+          </pre>
         </div>
+        )}
       </div>
-      <div className="row">
-        <div className="col-xs-12 col-sm-5">
-          <CategoryListComponent {...{categories, addCategory}} onCategoryClick={selectCategory} />
-        </div>
-        <div className="col-xs-12 col-sm-7">
-          <SpendingListComponent {...{spendings: filterSpendingByCategory(spendings, selectedCategoryId), addSpending}} />
-        </div>
+
+      <div className="col-xs-12 col-sm-5">
+        <CategoryListComponent {...{categories, addCategory}} onCategoryClick={selectCategory} />
+      </div>
+      <div className="col-xs-12 col-sm-7">
+        <SpendingListComponent {...{spendings: filterSpendingByCategory(spendings, selectedCategoryId), addSpending}} />
       </div>
     </div>
   );

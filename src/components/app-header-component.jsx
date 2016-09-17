@@ -19,7 +19,14 @@ const AppHeader = (props) => {
             <a href="#">{currentUser.fbId}</a>
           </li>
           <li>
-            <Link to={`/settings`}>Settings</Link>
+            <Link to={`/categories`}>
+              <i className="fa fa-gift"></i> Categories
+            </Link>
+          </li>
+          <li>
+            <Link to={`/settings`}>
+              <i className="fa fa-cogs"></i> Settings
+            </Link>
           </li>
         </ul>
         }

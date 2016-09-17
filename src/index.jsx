@@ -15,7 +15,7 @@ import {loginFacebook} from './actions';
 /*---------------------------------------------------------
 / UI
 /--------------------------------------------------------*/ 
-import {AppComponent, SettingsComponent} from './containers';
+import {AppComponent, CategoriesComponent, SettingsComponent} from './containers';
 import {AppHeaderComponent} from './components';
 
 /*---------------------------------------------------------
@@ -40,27 +40,34 @@ const Layout = (store) => (props) => {
   return (
     <div className="app">
       <AppHeaderComponent {...{currentUser}} {...actions} />
+      <div className="container">
       {props.children}
+      </div>
     </div>
   );
 };
 
-const Routable = (store) => (
-  <Router history={hashHistory}>
-    <Route path='/' component={Layout(store)}>
-      <IndexRoute component={AppComponent} />
-      <Route path='settings' component={SettingsComponent} onEnter={(nextState, replace, cb) => {
-        const currentUser =  store.getState().currentUser;
-        if (currentUser.fbId) {
-          return cb();
-        }
+const Routable = (store) => {
+  const authencatedOnly = (nextState, replace, cb) => {
+    const currentUser =  store.getState().currentUser;
+    if (currentUser.fbId) {
+      return cb();
+    }
 
-        replace('/');
-        cb();
-      }} />
-    </Route>
-  </Router>
-);
+    replace('/');
+    cb();
+  };
+
+  return (
+    <Router history={hashHistory}>
+      <Route path='/' component={Layout(store)}>
+        <IndexRoute component={AppComponent} />
+        <Route path='categories' component={CategoriesComponent} onEnter={authencatedOnly} />
+        <Route path='settings' component={SettingsComponent} onEnter={authencatedOnly} />
+      </Route>
+    </Router>
+  );
+};
 
 const render = (store, routes) => () => {
   ReactDOM.render(
