@@ -54,17 +54,20 @@ export const loginFacebook = () => (dispatch, getState) => {
 export const updateSettings = (settings) => (dispatch, getState) => {
   dispatch({ type: UPDATE_SETTINGS, status: 'pending' });
 
-  request.post('/api/settings')
-    .set('x-access-key', '0')
-    .send({settings})
-    .end((error, response) => {
-    if (error) {
-      return dispatch({ type: UPDATE_SETTINGS, status: 'error', params: {error} });
-    }
-    let data = response.body;
+  return new Promise(resolve =>
+    request.post('/api/settings')
+      .set('x-access-key', '0')
+      .send({settings})
+      .end((error, response) => {
+      if (error) {
+        return dispatch({ type: UPDATE_SETTINGS, status: 'error', params: {error} });
+      }
+      let data = response.body;
 
-    dispatch({ type: UPDATE_SETTINGS, status: 'success', params: data.settings });
-  })
+      dispatch({ type: UPDATE_SETTINGS, status: 'success', params: data.settings });
+      resolve();
+    })
+  );
 };
 
 export const addCategory = (label) => (dispatch, getState) => {
@@ -92,14 +95,19 @@ export const addSpending = (spending) => (dispatch, getState) => {
 
   let entry = Object.assign({type: 'expense'}, spending);
 
-  request.post('/api/entries').send(entry).end((error, response) => {
-    if (error) {
-      return dispatch({ type: ADD_SPENDING, status: 'error', params: {error} });
-    }
-    let data = response.body;
-    
-    dispatch({ type: ADD_SPENDING, status: 'success', params: {spending: data.entry} });
-  })
+  return new Promise(resolve =>
+    request.post('/api/entries')
+      .set('x-access-key', '0')
+      .send(entry).end((error, response) => {
+      if (error) {
+        return dispatch({ type: ADD_SPENDING, status: 'error', params: {error} });
+      }
+      let data = response.body;
+
+      dispatch({ type: ADD_SPENDING, status: 'success', params: {spending: data.entry} });
+      resolve()
+    })
+  );
 };
 
 export const selectCategory = (categoryId) => {

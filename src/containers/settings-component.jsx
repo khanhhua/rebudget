@@ -28,7 +28,9 @@ class SettingsComponent extends React.Component {
   onSaveClick () {
     const {updateSettings} = this.props;
     const {settings} = this.state;
-    updateSettings(settings);
+    const ret = updateSettings(settings).then;
+
+    console.assert(typeof ret.then === 'function', 'Action updateSettings should return a promise');
   }
 
   render () {

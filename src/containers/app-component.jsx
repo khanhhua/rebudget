@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CategoryListComponent, SpendingListComponent } from '../components';
+import { CategoryListComponent, SpendingListComponent, SpendingAddComponent } from '../components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -20,7 +20,7 @@ const AppComponent = (props) => {
     <div className="row">
       <div className="col-xs-12">
         {networkActivity && (
-        <div className="alert warn">
+        <div className="alert warning">
           <pre>
             <ul>
               <li>type: {networkActivity.type}</li>
@@ -31,11 +31,9 @@ const AppComponent = (props) => {
         )}
       </div>
 
-      <div className="col-xs-12 col-sm-5">
-        <CategoryListComponent {...{categories, addCategory}} onCategoryClick={selectCategory} />
-      </div>
-      <div className="col-xs-12 col-sm-7">
-        <SpendingListComponent {...{spendings: filterSpendingByCategory(spendings, selectedCategoryId), addSpending}} />
+      <div className="col-xs-12 col-sm-8 col-sm-push-2">
+        <h2>Record your spending</h2>
+        <SpendingAddComponent {...{categories, onSave: addSpending, loggedIn: !!currentUser.fbId}} />
       </div>
     </div>
   );
