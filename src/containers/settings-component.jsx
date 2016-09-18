@@ -39,7 +39,7 @@ class SettingsComponent extends React.Component {
 
     return (
       <div className="container">
-        <div className="col-xs-12">
+        <div className="col-xs-12 col-sm-8 col-sm-push-2">
           <div className="form">
             <div className="form-group">
               <label htmlFor="input-currency" className="control-label">Currency</label>
@@ -49,7 +49,7 @@ class SettingsComponent extends React.Component {
                      value={settings.currency} />
             </div>
 
-            <div className="form-group tex-center">
+            <div className="form-group text-center">
               <button className="btn btn-success" onClick={this.onSaveClick.bind(this)}>Save</button>
             </div>
           </div>

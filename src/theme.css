@@ -1,6 +1,31 @@
+.navbar {
+  border-radius: 0;
+  border-width: 0;
+  box-shadow: inset 0 -5px 5px -3px rgba(0,0,0,0.2);
+}
+
+.navbar-nav > li > a.active {
+  background-color: white;
+}
+
 .btn:active,
 .btn:focus {
   outline: none;
+}
+
+.panel.panel-default {
+  border: none;
+}
+
+.panel.panel-default > .panel-heading {
+  padding-left: 2px;
+  padding-right: 2px;
+
+  border: none;
+  border-bottom: 1px #ccc solid;
+
+  background: transparent;
+  font-weight: bold;
 }
 
 .pageview {

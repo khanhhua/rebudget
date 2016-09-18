@@ -31,7 +31,7 @@ const AppComponent = (props) => {
         )}
       </div>
 
-      <div className="col-xs-12 col-sm-8 col-sm-push-2">
+      <div className="col-xs-12 col-sm-7">
         <PageviewComponent>
           <EntryAddComponent type="expense"
                              title="Add Expense"
@@ -40,6 +40,8 @@ const AppComponent = (props) => {
                              title="Add Income"
                              {...{categories, onSave: addIncome, loggedIn: !!currentUser.fbId}} />
         </PageviewComponent>
+      </div>
+      <div className="col-xs-12 col-sm-5">
         <EntryListComponent title="Recent activities" {...{entries: spendings.concat(incomes)}}/>
       </div>
     </div>

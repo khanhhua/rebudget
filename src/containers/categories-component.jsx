@@ -60,7 +60,7 @@ const CategoriesComponent = (props) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-xs-12">
+        <div className="col-xs-12 col-sm-8 col-sm-push-2">
           <ul className="list-group">
           {categories.map((item) =>
             <li className="list-group-item" key={item.id}>{item.label}</li>

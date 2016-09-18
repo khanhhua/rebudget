@@ -76,11 +76,18 @@ export const loginFacebook = () => (dispatch, getState) => {
 
     FB.getLoginStatus((response) => {
       if (response.status === 'connected') {
-        // request.get('/api/me').send().end((response) => {});
-        var fbId = response.authResponse.userID;
-        dispatch({ type: LOGIN_FACEBOOK, status: 'success', params: {fbId}});
-        // Load initial data only when logged in
-        dispatch(initData());
+        FB.api('/me', {fields: 'name'}, function(response) {
+          if (response && response.error) {
+            dispatch({ type: LOGIN_FACEBOOK, status: 'error', params: {error: 'Could not connect user to Facebook'}});
+            return;
+          }
+
+          const {id: fbId, name} = response;
+
+          dispatch({ type: LOGIN_FACEBOOK, status: 'success', params: {fbId, name}});
+          // Load initial data only when logged in
+          dispatch(initData());
+        });
       }
       else {
         dispatch({ type: LOGIN_FACEBOOK, status: 'error', params: {error: 'Could not connect user to Facebook'}});
