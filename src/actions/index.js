@@ -11,17 +11,56 @@ import {INIT_DATA, LOGIN_FACEBOOK, UPDATE_SETTINGS, ADD_CATEGORY, ADD_SPENDING, 
 export const initData = () => (dispatch, getState) => {
   dispatch({ type: INIT_DATA, status: 'pending' });
 
-  request.get('/api/settings')
-    .set('x-access-key', '0')
-    .send()
-    .end((error, response) => {
-      if (error) {
-        return dispatch({ type: INIT_DATA, status: 'error', params: {error} });
-      }
-      let data = response.body;
+  return Promise.all([
+    new Promise((resolve, reject) =>
+      request.get('/api/settings')
+        .set('x-access-key', '0')
+        .send()
+        .end((error, response) => {
+          if (error) {
+            return reject(error);
+          }
+          let data = response.body;
 
-      dispatch({ type: INIT_DATA, status: 'success', params: data.settings });
-    })
+          debugger;
+          resolve(data.settings);
+        })),
+    new Promise((resolve, reject) =>
+      request.get('/api/categories')
+        .set('x-access-key', '0')
+        .send()
+        .end((error, response) => {
+          if (error) {
+            return reject(error);
+          }
+          let data = response.body;
+
+          resolve(data.categories);
+        })),
+    new Promise((resolve, reject) =>
+      request.get('/api/entries')
+        .set('x-access-key', '0')
+        .send()
+        .end((error, response) => {
+          if (error) {
+            return reject(error);
+          }
+          let data = response.body;
+
+          resolve(data.entries);
+        }))
+  ]).then(
+    results => {
+      const [settings, categories, entries] = results;
+      const spendings = entries.filter(item => item.type === 'expense');
+      const incomings = entries.filter(item => item.type === 'income');
+
+      dispatch({ type: INIT_DATA, status: 'success', params: {settings, categories, spendings, incomings} });
+    },
+    error => {
+      dispatch({ type: INIT_DATA, status: 'error', params: {error} });
+    }
+  );
 };
 
 export const loginFacebook = () => (dispatch, getState) => {

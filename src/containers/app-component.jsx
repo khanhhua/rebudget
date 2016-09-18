@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CategoryListComponent, SpendingListComponent, SpendingAddComponent } from '../components';
+import { SpendingListComponent, SpendingAddComponent } from '../components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -13,7 +13,7 @@ const filterSpendingByCategory = (spendings, categoryId) => {
 };
 
 const AppComponent = (props) => {
-  const {addCategory, addSpending, selectCategory, loginFacebook} = props;
+  const {addSpending} = props;
   const {currentUser, categories, spendings, selectedCategoryId, networkActivity} = props;
 
   return (
@@ -34,6 +34,7 @@ const AppComponent = (props) => {
       <div className="col-xs-12 col-sm-8 col-sm-push-2">
         <h2>Record your spending</h2>
         <SpendingAddComponent {...{categories, onSave: addSpending, loggedIn: !!currentUser.fbId}} />
+        <SpendingListComponent title="Recent spendings" {...{spendings}}/>
       </div>
     </div>
   );

@@ -8,8 +8,8 @@ const settingsReducer = (state = {}, {type, status, params}) => {
   }
 
   if (type === INIT_DATA) {
-    let {currency} = params;
-    newState = Object.assign({}, state, {currency});
+    let {settings} = params;
+    newState = Object.assign({}, state, settings);
   }
   else if (type === UPDATE_SETTINGS) {
     let {currency} = params;
