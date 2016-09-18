@@ -1,23 +1,23 @@
 import React from "react";
 
-export default class SpendingAddComponent extends React.Component {
+export default class EntryAddComponent extends React.Component {
   constructor (props) {
     super();
-    this.state = Object.assign({spending:{}, errors: {}}, props);
+    this.state = Object.assign({entry:{}, errors: {}}, props);
   }
 
-  validate (spending) {
+  validate (entry) {
     const errors = {};
 
-    if (!spending.amount || spending.amount <= 0) {
+    if (!entry.amount || entry.amount <= 0) {
       errors.amount = 'Amount should be positive';
     }
 
-    if (!spending.category_id) {
+    if (!entry.category_id) {
       errors.category_id = 'Category should be specified';
     }
 
-    if (!spending.accounted_on) {
+    if (!entry.accounted_on) {
       errors.accounted_on = 'Date should be specified';
     }
 
@@ -26,9 +26,10 @@ export default class SpendingAddComponent extends React.Component {
 
   onSaveClick () {
     const {onSave} = this.props;
-    const {spending} = this.state;
+    const {type} = this.props;
+    const {entry} = this.state;
 
-    const errors = this.validate(spending);
+    const errors = this.validate(entry);
     if (Object.keys(errors).length) {
       this.setState({errors});
       return;
@@ -37,19 +38,19 @@ export default class SpendingAddComponent extends React.Component {
       this.setState({errors:{}});
     }
 
-    const ret = onSave(spending);
+    const ret = onSave(entry);
     console.assert(typeof ret.then === 'function', 'Action should be a promise');
 
     ret.then(() => {
-      this.setState({spending: {}});
+      this.setState({entry: {}});
     });
   }
 
   onInputChange (e) {
-    const {spending} = this.state;
+    const {entry} = this.state;
 
-    const newSpending = Object.assign(spending, {[e.target.name]: e.target.value})
-    this.setState({'spending': newSpending});
+    const newEntry = Object.assign(entry, {[e.target.name]: e.target.value})
+    this.setState({'entry': newEntry});
   }
 
   componentWillReceiveProps (nextProps) {
@@ -57,16 +58,18 @@ export default class SpendingAddComponent extends React.Component {
   }
 
   render () {
+    const {title} = this.props;
     const {categories, loggedIn} = this.state;
-    const {spending} = this.state;
+    const {entry} = this.state;
     const {errors} = this.state;
 
     return (
       <div className="form">
+        <h3>{title}</h3>
         <div className={errors.amount?'form-group has-error':'form-group'}>
           <label htmlFor="amount">Amount</label>
           <input onChange={(e)=>this.onInputChange(e)}
-                 value={spending.amount || 0}
+                 value={entry.amount || 0}
                  name="amount"
                  type="text" className="form-control"
                  id="amount"/>
@@ -80,7 +83,7 @@ export default class SpendingAddComponent extends React.Component {
         <div className={errors.category_id?'form-group has-error':'form-group'}>
           <label htmlFor="category-id" className="control-label">Category</label>
           <select onChange={(e)=>this.onInputChange(e)}
-                  value={spending.category_id}
+                  value={entry.category_id}
                   name="category_id"
                   id="category-id" className="form-control">
             <option value="">SELECT A CATEGORY</option>
@@ -98,7 +101,7 @@ export default class SpendingAddComponent extends React.Component {
         <div className={errors.accounted_on?'form-group has-error':'form-group'}>
           <label htmlFor="amount">Date</label>
           <input onChange={(e)=>this.onInputChange(e)}
-                 value={spending.accounted_on || ''}
+                 value={entry.accounted_on || ''}
                  name="accounted_on"
                  type="date" className="form-control"
                  id="acounted-on"/>
@@ -120,3 +123,8 @@ export default class SpendingAddComponent extends React.Component {
     );
   }
 }
+
+EntryAddComponent.propTypes = {
+  type: React.PropTypes.string.isRequired,
+  onSave: React.PropTypes.any.isRequired
+};

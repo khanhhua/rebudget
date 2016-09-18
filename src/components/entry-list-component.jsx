@@ -1,16 +1,16 @@
 import React from 'react';
 
-const SpendingListComponent = (props) => {
+const EntryListComponent = (props) => {
 
-  const { title, spendings } = props;
+  const { title, entries } = props;
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        {title || 'Spendings'}
+        {title || 'Entries'}
       </div>
       <ul className="list-group">
-      {spendings.map((item) =>
+      {entries.map((item) =>
         <li key={item.id} className="list-group-item">
           {item.category_label}
           <span className="pull-right">{item.amount}</span>
@@ -21,4 +21,4 @@ const SpendingListComponent = (props) => {
   );
 };
 
-export default SpendingListComponent;
+export default EntryListComponent;

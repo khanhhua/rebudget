@@ -3,7 +3,7 @@
  */
 
 import request from 'superagent';
-import {INIT_DATA, LOGIN_FACEBOOK, UPDATE_SETTINGS, ADD_CATEGORY, ADD_SPENDING, SELECT_CATEGORY} from './types';
+import {INIT_DATA, LOGIN_FACEBOOK, UPDATE_SETTINGS, ADD_CATEGORY, ADD_SPENDING, ADD_INCOME, SELECT_CATEGORY} from './types';
 
 /*---------------------------------------------------------
 / ACTIONS
@@ -22,7 +22,6 @@ export const initData = () => (dispatch, getState) => {
           }
           let data = response.body;
 
-          debugger;
           resolve(data.settings);
         })),
     new Promise((resolve, reject) =>
@@ -53,9 +52,9 @@ export const initData = () => (dispatch, getState) => {
     results => {
       const [settings, categories, entries] = results;
       const spendings = entries.filter(item => item.type === 'expense');
-      const incomings = entries.filter(item => item.type === 'income');
+      const incomes = entries.filter(item => item.type === 'income');
 
-      dispatch({ type: INIT_DATA, status: 'success', params: {settings, categories, spendings, incomings} });
+      dispatch({ type: INIT_DATA, status: 'success', params: {settings, categories, spendings, incomes} });
     },
     error => {
       dispatch({ type: INIT_DATA, status: 'error', params: {error} });
@@ -144,6 +143,26 @@ export const addSpending = (spending) => (dispatch, getState) => {
       let data = response.body;
 
       dispatch({ type: ADD_SPENDING, status: 'success', params: {spending: data.entry} });
+      resolve()
+    })
+  );
+};
+
+export const addIncome = (income) => (dispatch, getState) => {
+  dispatch({ type: ADD_INCOME, status: 'pending' });
+
+  let entry = Object.assign({type: 'income'}, income);
+
+  return new Promise(resolve =>
+    request.post('/api/entries')
+      .set('x-access-key', '0')
+      .send(entry).end((error, response) => {
+      if (error) {
+        return dispatch({ type: ADD_INCOME, status: 'error', params: {error} });
+      }
+      let data = response.body;
+
+      dispatch({ type: ADD_INCOME, status: 'success', params: {income: data.entry} });
       resolve()
     })
   );

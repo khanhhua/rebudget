@@ -1,0 +1,37 @@
+.btn:active,
+.btn:focus {
+  outline: none;
+}
+
+.pageview {
+  display: block;
+
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.pageview > .pageview-switch {
+  position: relative;
+  z-index: 1;
+  margin-bottom: -45px;
+  text-align: right;
+}
+
+.pageview > .pageview-track {
+  width: 200%;
+
+  -webkit-transition: transform 200ms;
+  -moz-transition: transform 200ms;
+  -ms-transition: transform 200ms;
+  -o-transition: transform 200ms;
+  transition: transform 200ms;;
+}
+
+.pageview-track > .pageview-item {
+  display: block;
+  float: left;
+
+  width: 50%;
+  padding: 0 15px;
+}
