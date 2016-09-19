@@ -1,3 +1,15 @@
+html, body {
+  font-weight: 100;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
 .navbar {
   border-radius: 0;
   border-width: 0;
@@ -78,6 +90,7 @@
 
   padding-right: 15px;
   padding-left: 15px;
+  padding-bottom: 10px;
 }
 
 .block-grid.block-grid-upto-3 > .block-grid-item {
