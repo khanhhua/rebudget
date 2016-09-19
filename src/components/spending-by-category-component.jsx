@@ -1,4 +1,5 @@
 import React from 'react';
+import {default as _} from 'lodash'
 
 export default class SpendingByCategoryComponent extends React.Component {
   constructor (props) {
@@ -9,6 +10,7 @@ export default class SpendingByCategoryComponent extends React.Component {
   }
 
   render () {
+    const {settings} = this.props;
     let {spendings} = this.state;
 
     const groups = spendings.reduce((acc, item) => {
@@ -32,12 +34,14 @@ export default class SpendingByCategoryComponent extends React.Component {
       return acc;
     }, {});
 
-    const categories = Object.keys(groups).map(key => (
+    const categories = Object.keys(groups)
+      .map(key => (
       {
         id: groups[key].id,
         label: groups[key].label,
         amount: groups[key].amount
-      }));
+      }))
+      .sort((a, b) => a.id.localeCompare(b.id));
 
     return (
       <div className="panel panel-default">
@@ -49,7 +53,7 @@ export default class SpendingByCategoryComponent extends React.Component {
             <li key={item.id} className="list-group-item">
               {item.label}
               <span className="pull-right">
-              {item.amount}
+                {settings.currency}&nbsp;{item.amount}
               </span>
             </li>
           ))}

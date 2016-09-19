@@ -6,7 +6,9 @@ import moment from 'moment';
 
 export default class ActivityChartComponent extends React.Component {
   render () {
-    const {entries} = this.props;
+    const {settings, entries} = this.props;
+    const {currency} = settings;
+
     entries.sort((a, b) => a.accounted_on.localeCompare(b.accounted_on));
 
     const categories = entries.reduce((acc, item) => {
@@ -31,7 +33,9 @@ export default class ActivityChartComponent extends React.Component {
         return acc;
       }, {});
 
-    const categoryKeys = Object.keys(categories);
+    const categoryKeys = Object.keys(categories).sort((a, b) => {
+      return categories[a].localeCompare(categories[b]);
+    });
     const chartData = _.reduce(groupByDates, (acc, entries, date) => {
       const formattedDate = moment(date).format('DD/MM');
 
@@ -52,7 +56,7 @@ export default class ActivityChartComponent extends React.Component {
 
     const options = {
       hAxis: { title:'Date' },
-      vAxis: { title:'Amount' },
+      vAxis: { title:`Amount (${currency})` },
       legend: 'right'
     };
 
@@ -62,15 +66,16 @@ export default class ActivityChartComponent extends React.Component {
           Activity Summary
         </div>
         <div className="panel-body">
-          <Chart chartType="ColumnChart" data={chartData} options={options} width={"100%"} height={"400px"} />
+          <Chart chartType="ColumnChart" data={chartData} options={options} width={"100%"} height={"250px"} />
         </div>
-        <div>Details</div>
-        <ul className="list-group">
+        <h5 className="panel-heading">Details</h5>
+        <ul className="list-group list-group-entries">
         {entries.map(item => (
           <li key={item.id} className="list-group-item">
-            {item.category_label}
+            <span className="date">{moment(item.accounted_on).format('DD/MM')}</span>
+            <span>{item.category_label}</span>
             <span className="pull-right">
-              {item.amount}
+              {currency} {item.amount}
               &nbsp;
               {item.type==='expense'?
                 <i className="fa fa-arrow-down text-danger"></i>

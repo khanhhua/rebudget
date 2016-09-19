@@ -5,8 +5,12 @@ import {connect} from 'react-redux';
 import {ActivityChartComponent} from '../components';
 import {SpendingByCategoryComponent} from '../components';
 
+const formatMoney = (n) => {
+  return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+};
+
 const DashboardComponent = (props) => {
-  const {entries: {spendings, incomes}} = props;
+  const {settings, entries: {spendings, incomes}} = props;
 
   const summary = {
     incomes: incomes.reduce((acc, item) => acc + item.amount, 0),
@@ -26,14 +30,14 @@ const DashboardComponent = (props) => {
             <div className="block-grid-item">
               <h4>Income</h4>
               <span className="text-lg">
-                <i className="fa fa-arrow-up text-success"></i>&nbsp;{summary.incomes}
+                <i className="fa fa-arrow-up text-success"></i>&nbsp;{formatMoney(summary.incomes)}
               </span>
             </div>
 
             <div className="block-grid-item">
               <h4>Spending</h4>
               <span className="text-lg">
-                <i className="fa fa-arrow-down text-danger"></i>&nbsp;{summary.spendings}
+                <i className="fa fa-arrow-down text-danger"></i>&nbsp;{formatMoney(summary.spendings)}
               </span>
             </div>
 
@@ -44,17 +48,17 @@ const DashboardComponent = (props) => {
                   <i className="fa fa-arrow-down text-danger"></i>
                   :
                   <i className="fa fa-arrow-up text-success"></i>
-                }&nbsp;{summary.saving}
+                }&nbsp;{formatMoney(summary.saving)}
               </span>
             </div>
           </div>
         </div>
 
         <div className="col-xs-12 col-sm-4">
-          <SpendingByCategoryComponent {...{spendings}} />
+          <SpendingByCategoryComponent {...{settings, spendings}} />
         </div>
         <div className="col-xs-12 col-sm-8">
-          <ActivityChartComponent {...{entries: incomes.concat(spendings)}} />
+          <ActivityChartComponent {...{settings, entries: incomes.concat(spendings)}} />
         </div>
       </div>
     </div>
@@ -66,9 +70,9 @@ DashboardComponent.componentWillReceiveProps = (nextProps) => {
 }
 
 const mapStateToProps = (state) => {
-  const {entries} = state;
+  const {entries, settings} = state;
 
-  return {entries};
+  return {entries, settings};
 };
 
 export default connect(mapStateToProps)(DashboardComponent);
