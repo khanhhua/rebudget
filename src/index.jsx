@@ -15,7 +15,7 @@ import {loginFacebook} from './actions';
 /*---------------------------------------------------------
 / UI
 /--------------------------------------------------------*/ 
-import {AppComponent, CategoriesComponent, SettingsComponent} from './containers';
+import {AppComponent, CategoriesComponent, SettingsComponent, DashboardComponent} from './containers';
 import {AppHeaderComponent} from './components';
 
 /*---------------------------------------------------------
@@ -65,6 +65,7 @@ const Routable = (store) => {
         <IndexRoute component={AppComponent} />
         <Route path='categories' component={CategoriesComponent} onEnter={authencatedOnly} />
         <Route path='settings' component={SettingsComponent} onEnter={authencatedOnly} />
+        <Route path='dashboard' component={DashboardComponent} onEnter={authencatedOnly} />
       </Route>
     </Router>
   );
