@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pyramid web application">
+    <meta name="author" content="Khanh Hua <giakhanh2487@gmail.com>">
+    <link rel="shortcut icon" href="http://localhost:6540/static/pyramid-16x16.png">
+
+    <title>Home Budget | Khanh Hua</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this scaffold -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href="http://localhost:6540/static/theme.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="col-xs-12 col-sm-4 col-sm-push-4">
+        <h1 class="app-name">reBudget <small>a HomeBudget clone</small></h1>
+
+        <div class="panel panel-default panel-login">
+          <div class="panel-heading">Login</div>
+          <div class="panel-body">
+            <div class="text-center">
+              <button class="btn btn-primary" onclick="login()">
+                <i class="fa fa-facebook-official"></i> Facebook
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dislaimer">
+          <p>&ast;This is a clone from the official <a href="http://www.anishu.com/" target="_blank">Home Budget</a></p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+    <script>
+      function login () {
+        var url = ['https://www.facebook.com/dialog/oauth?',
+                   'client_id=1771952326416166&redirect_uri=http://rebudget-api.khanhhua.com/auth/facebook?',
+                   encodeURI('back=http://rebudget.khanhhua.com/app'),
+                   '&scope=email'].join('');
+        window.open(url, '_blank');
+      }
+
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1771952326416166',
+          xfbml      : false,
+          version    : 'v2.7'
+        });
+
+        FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            // the user is logged in and has authenticated your
+            // app, and response.authResponse supplies
+            // the user's ID, a valid access token, a signed
+            // request, and the time the access token
+            // and signed request each expire
+            var uid = response.authResponse.userID;
+            var accessToken = response.authResponse.accessToken;
+
+            console.debug('user:', uid, accessToken);
+            // initialize the application view
+          } else if (response.status === 'not_authorized') {
+            // the user is logged in to Facebook,
+            // but has not authenticated your app
+          } else {
+            // the user isn't logged in to Facebook.
+          }
+         });
+      };
+
+      (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+  </body>
+</html>
