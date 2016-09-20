@@ -7,14 +7,17 @@ export default class EntryAddComponent extends React.Component {
   }
 
   validate (entry) {
+    const {type} = this.props;
     const errors = {};
 
     if (!entry.amount || entry.amount <= 0) {
       errors.amount = 'Amount should be positive';
     }
 
-    if (!entry.category_id) {
-      errors.category_id = 'Category should be specified';
+    if (type === 'expense') {
+      if (!entry.category_id) {
+        errors.category_id = 'Category should be specified';
+      }
     }
 
     if (!entry.accounted_on) {
@@ -58,7 +61,7 @@ export default class EntryAddComponent extends React.Component {
   }
 
   render () {
-    const {title} = this.props;
+    const {title, type} = this.props;
     const {categories, loggedIn} = this.state;
     const {entry} = this.state;
     const {errors} = this.state;
@@ -80,6 +83,7 @@ export default class EntryAddComponent extends React.Component {
           }
         </div>
 
+        {type==='expense' &&
         <div className={errors.category_id?'form-group has-error':'form-group'}>
           <label htmlFor="category-id" className="control-label">Category</label>
           <select onChange={(e)=>this.onInputChange(e)}
@@ -97,7 +101,7 @@ export default class EntryAddComponent extends React.Component {
           </small>
           }
         </div>
-
+        }
         <div className={errors.accounted_on?'form-group has-error':'form-group'}>
           <label htmlFor="amount">Date</label>
           <input onChange={(e)=>this.onInputChange(e)}

@@ -4,7 +4,7 @@
   "description": "react, redux, javascript",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/webpack/bin/webpack.js",
+    "build": "./node_modules/webpack/bin/webpack.js -p --config webpack.config.prod.js",
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "keywords": [
@@ -30,7 +30,10 @@
   },
   "dependencies": {
     "history": "^4.2.0",
+    "lodash": "^4.16.0",
+    "moment": "^2.15.0",
     "react-dom": "^15.3.1",
+    "react-google-charts": "^1.1.1",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
     "redux": "^3.6.0",

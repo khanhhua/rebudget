@@ -21,6 +21,11 @@ const AppHeader = (props) => {
         {currentUser.fbId &&
         <ul className="nav navbar-nav">
           <li>
+            <Link to={`/dashboard`} activeClassName="active">
+              <i className="fa fa-bar-chart"></i> Dasboard
+            </Link>
+          </li>
+          <li>
             <Link to={`/categories`} activeClassName="active">
               <i className="fa fa-gift"></i> Categories
             </Link>

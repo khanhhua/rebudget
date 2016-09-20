@@ -64,7 +64,11 @@ export const initData = () => (dispatch, getState) => {
 
 export const loginFacebook = () => (dispatch, getState) => {
   var url = ['https://www.facebook.com/dialog/oauth?',
-              'client_id=1771952326416166&redirect_uri=http://localhost:8080/auth/facebook',
+              'client_id=1771952326416166',
+               process.env.NODE_ENV==='production'?
+                 '&redirect_uri=https://rebudget-api.herokuapp.com/auth/facebook'
+                 :
+                 '&redirect_uri=http://localhost:8080/auth/facebook',
               '&scope=email'].join('');
 
   dispatch({ type: LOGIN_FACEBOOK, status: 'pending' });
