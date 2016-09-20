@@ -19,7 +19,7 @@ module.exports = {
    extensions: ['', '.js', '.jsx']
  },
  output: {
-   path: __dirname + '/dist',
+   path: __dirname + '/debug',
    publicPath: '/',
    filename: 'bundle.js'
  },
@@ -30,5 +30,7 @@ module.exports = {
      '/auth/*': 'http://localhost:6543',
    }
  },
- plugins: []
+ plugins: [
+   new webpack.EnvironmentPlugin(['NODE_ENV'])
+ ]
 };
