@@ -17,32 +17,43 @@ const AppHeader = (props) => {
           <div className="navbar-brand">
             <Link to="/">Home Budget</Link>
           </div>
+          <button type="button" className="navbar-toggle collapsed" aria-expanded="false">
+            <span className="sr-only">Toggle navigation</span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+          </button>
+          {currentUser.fbId &&
+          <p className="nav navbar-text" href="#">
+            <i className="fa fa-user"></i> {currentUser.name}
+          </p>
+          }
         </div>
         {currentUser.fbId &&
-        <ul className="nav navbar-nav">
-          <li>
-            <Link to={`/dashboard`} activeClassName="active">
-              <i className="fa fa-bar-chart"></i> Dasboard
-            </Link>
-          </li>
-          <li>
-            <Link to={`/categories`} activeClassName="active">
-              <i className="fa fa-gift"></i> Categories
-            </Link>
-          </li>
-          <li>
-            <Link to={`/settings`} activeClassName="active">
-              <i className="fa fa-cogs"></i> Settings
-            </Link>
-          </li>
-        </ul>
-        }
-        {currentUser.fbId &&
-        <ul className="nav navbar-nav navbar-right">
-          <li>
-            <a href="#"><i className="fa fa-user"></i> {currentUser.name}</a>
-          </li>
-        </ul>
+        <div className="navbar-collapse collapse">
+          <ul className="nav navbar-nav">
+            <li>
+              <Link to={`/dashboard`} activeClassName="active">
+                <i className="fa fa-bar-chart"></i> Dasboard
+              </Link>
+            </li>
+            <li>
+              <Link to={`/categories`} activeClassName="active">
+                <i className="fa fa-gift"></i> Categories
+              </Link>
+            </li>
+            <li>
+              <Link to={`/settings`} activeClassName="active">
+                <i className="fa fa-cogs"></i> Settings
+              </Link>
+            </li>
+          </ul>
+          <ul className="nav navbar-nav navbar-right">
+            <li>
+              <a href="#"><i className="fa fa-user"></i> {currentUser.name}</a>
+            </li>
+          </ul>
+        </div>
         }
       </div>
     </nav>

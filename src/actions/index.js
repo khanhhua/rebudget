@@ -63,41 +63,60 @@ export const initData = () => (dispatch, getState) => {
 };
 
 export const loginFacebook = () => (dispatch, getState) => {
-  var url = ['https://www.facebook.com/dialog/oauth?',
-              'client_id=1771952326416166',
-               process.env.NODE_ENV==='production'?
-                 '&redirect_uri=https://rebudget-api.herokuapp.com/auth/facebook'
-                 :
-                 '&redirect_uri=http://localhost:8080/auth/facebook',
-              '&scope=email'].join('');
+  login().then(
+    () => {
+      console.info(`[action:loginFacebook] User is already signed in.`);
+    },
+    () => {
+    var url = ['https://www.facebook.com/dialog/oauth?',
+      'client_id=1771952326416166',
+      process.env.NODE_ENV==='production'?
+        '&redirect_uri=https://rebudget-api.herokuapp.com/auth/facebook'
+        :
+        '&redirect_uri=http://localhost:8080/auth/facebook',
+      '&scope=email'].join('');
 
-  dispatch({ type: LOGIN_FACEBOOK, status: 'pending' });
-  const childWindow = window.open(url, '_blank');
+    dispatch({ type: LOGIN_FACEBOOK, status: 'pending' });
+    const childWindow = window.open(url, '_blank');
 
-  const interval = setInterval(() => {
-    if (!childWindow.closed) return;
-    clearInterval(interval);
+    const interval = setInterval(() => {
+      if (!childWindow.closed) return;
+      clearInterval(interval);
 
-    FB.getLoginStatus((response) => {
-      if (response.status === 'connected') {
-        FB.api('/me', {fields: 'name'}, function(response) {
-          if (response && response.error) {
-            dispatch({ type: LOGIN_FACEBOOK, status: 'error', params: {error: 'Could not connect user to Facebook'}});
-            return;
+      login(false);
+    }, 500);
+  });
+
+  function login (probe=true) {
+    return new Promise((resolve, reject) => {
+      FB.getLoginStatus((response) => {
+        if (response.status === 'connected') {
+          FB.api('/me', {fields: 'name'}, function(response) {
+            if (response && response.error) {
+              dispatch({ type: LOGIN_FACEBOOK, status: 'error', params: {error: 'Could not connect user to Facebook'}});
+              return;
+            }
+
+            const {id: fbId, name} = response;
+
+            dispatch({ type: LOGIN_FACEBOOK, status: 'success', params: {fbId, name}});
+            // Load initial data only when logged in
+            dispatch(initData());
+            resolve();
+          });
+        }
+        else {
+          if (probe) {
+            reject();
           }
-
-          const {id: fbId, name} = response;
-
-          dispatch({ type: LOGIN_FACEBOOK, status: 'success', params: {fbId, name}});
-          // Load initial data only when logged in
-          dispatch(initData());
-        });
-      }
-      else {
-        dispatch({ type: LOGIN_FACEBOOK, status: 'error', params: {error: 'Could not connect user to Facebook'}});
-      }
-    })
-  }, 500);
+          else {
+            reject();
+            dispatch({ type: LOGIN_FACEBOOK, status: 'error', params: {error: 'Could not connect user to Facebook'}});
+          }
+        }
+      });
+    });
+  }
 };
 
 export const updateSettings = (settings) => (dispatch, getState) => {
