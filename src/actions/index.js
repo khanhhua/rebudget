@@ -5,6 +5,7 @@
 import request from 'superagent';
 import {INIT_DATA, LOGIN_FACEBOOK, UPDATE_SETTINGS, ADD_CATEGORY, ADD_SPENDING, ADD_INCOME, SELECT_CATEGORY} from './types';
 
+const API_PREFIX = process.env.API_PREFIX || '';
 /*---------------------------------------------------------
 / ACTIONS
 /--------------------------------------------------------*/
@@ -13,7 +14,7 @@ export const initData = () => (dispatch, getState) => {
 
   return Promise.all([
     new Promise((resolve, reject) =>
-      request.get('/api/settings')
+      request.get(`${API_PREFIX}/api/settings`)
         .set('x-access-key', '0')
         .send()
         .end((error, response) => {
@@ -25,7 +26,7 @@ export const initData = () => (dispatch, getState) => {
           resolve(data.settings);
         })),
     new Promise((resolve, reject) =>
-      request.get('/api/categories')
+      request.get(`${API_PREFIX}/api/categories`)
         .set('x-access-key', '0')
         .send()
         .end((error, response) => {
@@ -37,7 +38,7 @@ export const initData = () => (dispatch, getState) => {
           resolve(data.categories);
         })),
     new Promise((resolve, reject) =>
-      request.get('/api/entries')
+      request.get(`${API_PREFIX}/api/entries`)
         .set('x-access-key', '0')
         .send()
         .end((error, response) => {
@@ -164,7 +165,7 @@ export const addSpending = (spending) => (dispatch, getState) => {
   let entry = Object.assign({type: 'expense'}, spending);
 
   return new Promise(resolve =>
-    request.post('/api/entries')
+    request.post(`${API_PREFIX}/api/entries`)
       .set('x-access-key', '0')
       .send(entry).end((error, response) => {
       if (error) {
@@ -184,7 +185,7 @@ export const addIncome = (income) => (dispatch, getState) => {
   let entry = Object.assign({type: 'income'}, income);
 
   return new Promise(resolve =>
-    request.post('/api/entries')
+    request.post(`${API_PREFIX}/api/entries`)
       .set('x-access-key', '0')
       .send(entry).end((error, response) => {
       if (error) {
