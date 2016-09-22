@@ -31,6 +31,6 @@ module.exports = {
    }
  },
  plugins: [
-   new webpack.EnvironmentPlugin(['NODE_ENV'])
+   new webpack.EnvironmentPlugin(['NODE_ENV', 'API_PREFIX'])
  ]
 };

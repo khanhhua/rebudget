@@ -124,7 +124,7 @@ export const updateSettings = (settings) => (dispatch, getState) => {
   dispatch({ type: UPDATE_SETTINGS, status: 'pending' });
 
   return new Promise(resolve =>
-    request.post('/api/settings')
+    request.post(`${API_PREFIX}/api/settings`)
       .set('x-access-key', '0')
       .send({settings})
       .end((error, response) => {
@@ -145,7 +145,7 @@ export const addCategory = (label) => (dispatch, getState) => {
   let category = {label};
 
   return new Promise (resolve => {
-    request.post('/api/categories')
+    request.post(`${API_PREFIX}/api/categories`)
       .set('x-access-key', '0')
       .send(category).end((error, response) => {
       if (error) {
