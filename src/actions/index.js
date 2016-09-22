@@ -71,7 +71,7 @@ export const loginFacebook = () => (dispatch, getState) => {
     var url = ['https://www.facebook.com/dialog/oauth?',
       'client_id=1771952326416166',
       process.env.NODE_ENV==='production'?
-        '&redirect_uri=https://rebudget-api.khanhhua.com/auth/facebook'
+        '&redirect_uri=http://rebudget-api.khanhhua.com/auth/facebook'
         :
         '&redirect_uri=http://localhost:8080/auth/facebook',
       '&scope=email'].join('');
