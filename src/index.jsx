@@ -83,3 +83,5 @@ const render = (store, routes) => () => {
 const update = render(store, Routable(store));
 store.subscribe(update);
 update();
+
+store.dispatch(loginFacebook());
