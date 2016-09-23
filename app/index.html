@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Home Budget</title>
+  <title>reBudget</title>
   <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1">
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -22,15 +22,8 @@
 
     console.info('FB initialized');
   };
-
-  (function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
 </script>
-<script async defer src="bundle.js"></script>
+<script src="//connect.facebook.net/en_US/sdk.js"></script>
+<script defer src="bundle.js"></script>
 </body>
 </html>
