@@ -1,4 +1,5 @@
 export const LOGIN_FACEBOOK = 'core/LOGIN_FACEBOOK';
+export const LINK = 'core/LINK';
 
 export const INIT_DATA = 'core/INIT_DATA';
 export const UPDATE_SETTINGS = 'core/UPDATE_SETTINGS';

@@ -19,7 +19,7 @@ const AppComponent = (props) => {
   return (
     <div className="row">
       <div className="col-xs-12">
-        {networkActivity && (
+        {networkActivity.error && (
         <div className="alert warning">
           <pre>
             <ul>

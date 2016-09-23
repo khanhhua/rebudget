@@ -24,11 +24,7 @@ module.exports = {
    filename: 'bundle.js'
  },
  devServer: {
-   contentBase: ['./dist', './src'],
-   proxy: {
-     '/api/*': 'http://localhost:6543',
-     '/auth/*': 'http://localhost:6543',
-   }
+   contentBase: ['./dist', './src']
  },
  plugins: [
    new webpack.EnvironmentPlugin(['NODE_ENV', 'API_PREFIX'])
