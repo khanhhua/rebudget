@@ -8,45 +8,123 @@
     <meta name="author" content="Khanh Hua <giakhanh2487@gmail.com>">
     <link rel="shortcut icon" href="http://localhost:6540/static/pyramid-16x16.png">
 
-    <title>Home Budget | Khanh Hua</title>
+    <title>reBudget | Khanh Hua</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this scaffold -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link href="http://localhost:6540/static/theme.css" rel="stylesheet">
+    <style>
+    html, body {
+      font-family: 'Arvo', serif;
+      font-size: 20px;
+      letter-spacing: 0px;
+      word-spacing: 2px;
+    }
 
+    body {
+
+    }
+
+    .features {
+      position: relative;
+
+      width: 100%;
+      top: 50%;
+      min-height: 200px;
+
+      -webkit-transform: translateY(50%);
+      -moz-transform: translateY(50%);
+      -ms-transform: translateY(50%);
+      -o-transform: translateY(50%);
+      transform: translateY(50%);
+    }
+
+    .features h1 {
+      margin-bottom: 40px;
+    }
+
+    .features h2 {
+      margin-bottom: 20px;
+    }
+
+    .features > .row {
+      margin-left: -15px;
+      margin-right: -15px;
+    }
+
+    .effect-tear-off {
+      border-left: 2px dashed #dfdfdf;
+    }
+
+    footer {
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    </style>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
 
   <body>
-
-    <div class="container">
-      <div class="col-xs-12 col-sm-4 col-sm-push-4">
-        <h1 class="app-name">reBudget <small>a HomeBudget clone</small></h1>
-
-        <div class="panel panel-default panel-login">
-          <div class="panel-heading">Login</div>
-          <div class="panel-body">
-            <div class="text-center">
-              <button class="btn btn-primary" onclick="login()">
-                <i class="fa fa-facebook-official"></i> Facebook
+    <div class="container-fluid">
+      <div class="features">
+        <div class="row">
+          <h1 class="col-xs-12 text-center">
+            reBudget
+          </h1>
+        </div>
+        <div class="row">
+          <div class="col-sm-3 col-sm-offset-2 col-xs-12">
+            <p class="text-center">
+              <button class="btn btn-lg btn-primary" onclick="login()">
+                <i class="fa fa-facebook-official"></i> Login with Facebook
               </button>
-            </div>
+            </p>
+            <p class="text-center">
+              Start managing your finance now!
+            </p>
+          </div>
+          <div class="col-xs-12 col-sm-7 effect-tear-off">
+            <h2>Features</h2>
+            <ul>
+              <li>Flux architecture</li>
+              <li>React UI library with Redux application state management</li>
+              <li>Continuous integration with TravisCI</li>
+              <li>Static content brought to you by GitHub Page</li>
+              <li>Powered by Heroku platform</li>
+            </ul>
           </div>
         </div>
 
-        <div class="dislaimer">
-          <p>&ast;This is a clone from the official <a href="http://www.anishu.com/" target="_blank">Home Budget</a></p>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-4 col-sm-push-4">
+
         </div>
       </div>
     </div>
-
+    <footer>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 disclaimer">
+            <p>&ast;This is a clone from the official <a href="http://www.anishu.com/" target="_blank">Home Budget</a></p>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <p class="text-right">
+              <a href="https://github.com/khanhhua/rebudget"><i class="fa fa-github"></i>View on GitHub</a>
+              &mdash; Find me at <a href=https://twitter.com/giakhanh2487">@giakhanh2487</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
