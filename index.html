@@ -22,24 +22,48 @@
       font-size: 20px;
       letter-spacing: 0px;
       word-spacing: 2px;
+
+      background: #fff;
     }
 
-    body {
-
+    @media screen and (min-width: 768px) {
+      .container-fluid.expanded-sm {
+        padding: 0;
+      }
     }
 
     .features {
-      position: relative;
-
       width: 100%;
-      top: 50%;
-      min-height: 200px;
+      padding: 30px 0;
+    }
 
-      -webkit-transform: translateY(50%);
-      -moz-transform: translateY(50%);
-      -ms-transform: translateY(50%);
-      -o-transform: translateY(50%);
-      transform: translateY(50%);
+    @media screen and (min-width: 768px) {
+      .v-centered-sm {
+        -webkit-transform: translateY(50%);
+        -moz-transform: translateY(50%);
+        -ms-transform: translateY(50%);
+        -o-transform: translateY(50%);
+        transform: translateY(50%);
+      }
+    }
+
+    @media screen and (min-width:992px) {
+      .features {
+        position: relative;
+        padding-top: 40px;
+
+        /*box-shadow: 0 2px 4px 2px rgba(0,0,0,0.4);*/
+
+        /*-webkit-transform: translateY(10%);*/
+        /*-moz-transform: translateY(10%);*/
+        /*-ms-transform: translateY(10%);*/
+        /*-o-transform: translateY(10%);*/
+        /*transform: translateY(10%);*/
+      }
+
+      .effect-tear-off {
+        border-left: 2px dashed #dfdfdf;
+      }
     }
 
     .features h1 {
@@ -47,7 +71,27 @@
     }
 
     .features h2 {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+
+    @media screen and (min-width:768px) {
+      .features h1 {
+        margin-bottom: 20px;
+      }
+
+      .features h2 {
+        margin-bottom: 10px;
+      }
+    }
+
+    @media screen and (min-width:768px) {
+      .features h1 {
+        margin-bottom: 40px;
+      }
+
+      .features h2 {
+        margin-bottom: 20px;
+      }
     }
 
     .features > .row {
@@ -55,14 +99,31 @@
       margin-right: -15px;
     }
 
-    .effect-tear-off {
-      border-left: 2px dashed #dfdfdf;
+    footer {
+      width: 100%;
+      padding: 10px 0;
+      border-top: 1px solid lightgray;
+
+      background: whitesmoke;
     }
 
-    footer {
-      position: fixed;
-      width: 100%;
-      bottom: 0;
+    @media screen and (min-width:992px) {
+      footer {
+        position: fixed;
+        bottom: 0;
+      }
+    }
+
+    @media screen and (max-width:767px) {
+      .text-center-xs {
+        text-align: center;
+      }
+    }
+
+    @media screen and (min-width:768px) {
+      .text-right-sm {
+        text-align: right;
+      }
     }
     </style>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -73,7 +134,7 @@
   </head>
 
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid expanded-sm">
       <div class="features">
         <div class="row">
           <h1 class="col-xs-12 text-center">
@@ -81,7 +142,7 @@
           </h1>
         </div>
         <div class="row">
-          <div class="col-sm-3 col-sm-offset-2 col-xs-12">
+          <div class="col-sm-5 col-md-4 col-md-offset-1 col-xs-12 v-centered-sm">
             <p class="text-center">
               <button class="btn btn-lg btn-primary" onclick="login()">
                 <i class="fa fa-facebook-official"></i> Login with Facebook
@@ -102,22 +163,48 @@
             </ul>
           </div>
         </div>
-
-      </div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-4 col-sm-push-4">
-
+        <div class="row">
+          <div class="col-xs-12 col-sm-7 col-sm-push-5">
+            <h2>Built with</h2>
+            <ul class="list-inline text-center">
+              <li>
+                <a href="https://facebook.github.io/react/" target="_blank">
+                  <img src="https://facebook.github.io/react/img/logo.svg" alt="React" width="38">
+                </a>
+              </li>
+              <li>
+                <a href="https://babeljs.io" target="_blank">
+                  <img src="https://babeljs.io/images/logo.svg" alt="BabelJS" height="38">
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/lukehoban/es6features#readme" target="_blank">
+                  <img src="https://camo.githubusercontent.com/4d51f9ec68b606188d51525907159d993996c6ea/687474703a2f2f332e62702e626c6f6773706f742e636f6d2f2d5054747933436654476e412f54705a4f456a54515f57492f414141414141414141656f2f4b654b745f44355832786f2f73313630302f6a732e6a7067" alt="ES6" width="38">
+                </a>
+              </li>
+              <li>
+                <a href="https://www.python.org" target="_blank">
+                  <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" alt="Python" height="38">
+                </a>
+              </li>
+              <li>
+                <a href="https://wiki.postgresql.org" target="_blank">
+                  <img src="https://wiki.postgresql.org/images/thumb/7/71/PostgreSQL_logo.1color_blue.300x300.png/120px-PostgreSQL_logo.1color_blue.300x300.png" alt="PostGres" width="38">
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
     <footer>
-      <div class="container-fluid">
+      <div class="container">
         <div class="row">
           <div class="col-xs-12 col-sm-6 disclaimer">
-            <p>&ast;This is a clone from the official <a href="http://www.anishu.com/" target="_blank">Home Budget</a></p>
+            <p class="text-center-xs">&ast;This is a clone from the official <a href="http://www.anishu.com/" target="_blank">Home Budget</a></p>
           </div>
           <div class="col-xs-12 col-sm-6">
-            <p class="text-right">
+            <p class="text-center-xs text-right-sm">
               <a href="https://github.com/khanhhua/rebudget"><i class="fa fa-github"></i>View on GitHub</a>
               &mdash; Find me at <a href=https://twitter.com/giakhanh2487">@giakhanh2487</a>
             </p>
