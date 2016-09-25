@@ -18,18 +18,18 @@ const AppComponent = (props) => {
 
   return (
     <div className="row">
+      {networkActivity.error && (
       <div className="col-xs-12">
-        {networkActivity.error && (
         <div className="alert warning">
           <pre>
             <ul>
-              <li>type: {networkActivity.type}</li>
-              <li>params: {JSON.stringify(networkActivity.params)}</li>
+              <li>type: {networkActivity.error.type}</li>
+              <li>params: {JSON.stringify(networkActivity.error.params)}</li>
             </ul>
           </pre>
         </div>
-        )}
       </div>
+      )}
 
       <div className="col-xs-12 col-sm-7">
         <PageviewComponent>
