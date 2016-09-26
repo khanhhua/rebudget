@@ -31,7 +31,7 @@ export default class AppHeader extends React.Component {
           }
           <div className="navbar-header">
             <div className="navbar-brand">
-              <Link to="/">Home Budget</Link>
+              <Link to="/">reBudget</Link>
             </div>
             <button type="button" className="navbar-toggle collapsed"
                     onClick={() => this.onNavbarToggle()}
