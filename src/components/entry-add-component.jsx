@@ -10,7 +10,7 @@ export default class EntryAddComponent extends React.Component {
     const {type} = this.props;
     const errors = {};
 
-    if (!entry.amount || entry.amount <= 0) {
+    if (!entry.amount || entry.amount.length === 0  || entry.amount <= 0) {
       errors.amount = 'Amount should be positive';
     }
 
@@ -72,7 +72,7 @@ export default class EntryAddComponent extends React.Component {
         <div className={errors.amount?'form-group has-error':'form-group'}>
           <label htmlFor="amount">Amount</label>
           <input onChange={(e)=>this.onInputChange(e)}
-                 value={entry.amount || 0}
+                 value={entry.amount}
                  name="amount"
                  type="text" className="form-control"
                  id="amount"/>
