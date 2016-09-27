@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { CategoryListComponent, SpendingListComponent } from '../components';
+import { PageviewComponent, EntryListComponent, EntryAddComponent } from '../components';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 const filterSpendingByCategory = (spendings, categoryId) => {
   if (!categoryId) {
@@ -11,39 +13,54 @@ const filterSpendingByCategory = (spendings, categoryId) => {
 };
 
 const AppComponent = (props) => {
-  const {addCategory, addSpending, selectCategory} = props;
-  const {categories, spendings, selectedCategoryId, networkActivity} = props;
+  const {addSpending, addIncome} = props;
+  const {currentUser, categories, entries:{spendings, incomes}, networkActivity} = props;
 
   return (
-    <div className="container">
-      <h1>The React Fucking Redux works!</h1>
-      <div className="row">
-        <div className="col-xs-12">
-          {networkActivity && (
-          <div className="alert warn">
-            <pre>
-              <ul>
-                <li>type: {networkActivity.type}</li>
-                <li>params: {JSON.stringify(networkActivity.params)}</li>
-              </ul>
-            </pre>
-          </div>
-          )}
-          <div>
-            
-          </div>
+    <div className="row">
+      {networkActivity.error && (
+      <div className="col-xs-12">
+        <div className="alert warning">
+          <pre>
+            <ul>
+              <li>type: {networkActivity.error.type}</li>
+              <li>params: {JSON.stringify(networkActivity.error.params)}</li>
+            </ul>
+          </pre>
         </div>
       </div>
-      <div className="row">
-        <div className="col-xs-12 col-sm-5">
-          <CategoryListComponent {...{categories, addCategory}} onCategoryClick={selectCategory} />
-        </div>
-        <div className="col-xs-12 col-sm-7">
-          <SpendingListComponent {...{spendings: filterSpendingByCategory(spendings, selectedCategoryId), addSpending}} />
-        </div>
+      )}
+
+      <div className="col-xs-12 col-sm-7">
+        <PageviewComponent>
+          <EntryAddComponent type="expense"
+                             title="Add Expense"
+                             {...{categories, onSave: addSpending, loggedIn: !!currentUser.fbId}} />
+          <EntryAddComponent type="income"
+                             title="Add Income"
+                             {...{categories, onSave: addIncome, loggedIn: !!currentUser.fbId}} />
+        </PageviewComponent>
+      </div>
+      <div className="col-xs-12 col-sm-5">
+        <EntryListComponent title="Recent activities" {...{entries: spendings.concat(incomes)}}/>
       </div>
     </div>
   );
 };
 
-export default AppComponent;
+/*---------------------------------------------------------
+ / ACTIONS
+ /--------------------------------------------------------*/
+import { addCategory, addSpending, addIncome, selectCategory, loginFacebook} from '../actions';
+
+const mapStateToProps = (state, ownProps) => {
+  const {currentUser, categories, entries, networkActivity, ui} = state;
+
+  return {currentUser, categories, entries, networkActivity, selectedCategoryId: ui.selectedCategoryId};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({addCategory, addSpending, addIncome, selectCategory, loginFacebook}, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);

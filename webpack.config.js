@@ -19,15 +19,14 @@ module.exports = {
    extensions: ['', '.js', '.jsx']
  },
  output: {
-   path: __dirname + '/dist',
+   path: __dirname + '/debug',
    publicPath: '/',
    filename: 'bundle.js'
  },
  devServer: {
-   contentBase: './dist',
-   hot: true
+   contentBase: ['./dist', './src']
  },
  plugins: [
-   new webpack.HotModuleReplacementPlugin()
+   new webpack.EnvironmentPlugin(['NODE_ENV', 'API_PREFIX'])
  ]
 };

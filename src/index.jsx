@@ -1,25 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 
-import { createStore, combineReducers, applyMiddleware, bindActionCreators } from 'redux';
+import { createStore, applyMiddleware, bindActionCreators } from 'redux';
 
+import { IndexRoute, Router, Route, Link, hashHistory } from 'react-router';
 
 /*---------------------------------------------------------
-/ ACTIONS
-/--------------------------------------------------------*/ 
-import {addCategory, addSpending, selectCategory} from './actions';
+ / ACTIONS
+ /--------------------------------------------------------*/
+import {loginFacebook} from './actions';
 
 /*---------------------------------------------------------
 / UI
 /--------------------------------------------------------*/ 
-import {AppComponent} from './containers';
+import {AppComponent, CategoriesComponent, SettingsComponent, DashboardComponent} from './containers';
+import {AppHeaderComponent} from './components';
 
 /*---------------------------------------------------------
 / MIDDLEWARES
 /--------------------------------------------------------*/ 
 import {actionLogger} from './middlewares';
+import {default as promiseResolver} from 'redux-promise';
 
 /*---------------------------------------------------------
 / REDUCERS and STORE
@@ -29,29 +32,56 @@ import {default as rootReducer} from './reducers';
 /*---------------------------------------------------------
 / STORE
 /--------------------------------------------------------*/ 
-const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, thunk));
+const store = createStore(rootReducer, { categories:[{ id:'cat00', label: 'Default' }] }, applyMiddleware(actionLogger, promiseResolver, thunk));
 
-const mapStateToProps = (state, ownProps) => {
-  const {categories, spendings, networkActivity, ui} = state;
+const Layout = (store) => (props) => {
+  const {currentUser} = store.getState();
+  const actions = bindActionCreators({loginFacebook}, store.dispatch);
 
-  return {categories, spendings, networkActivity, selectedCategoryId: ui.selectedCategoryId};
+  return (
+    <div className="app">
+      <AppHeaderComponent {...{currentUser}} {...actions} />
+      <div className="container">
+      {props.children}
+      </div>
+    </div>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({addCategory, addSpending, selectCategory}, dispatch);
-}
+const Routable = (store) => {
+  const authencatedOnly = (nextState, replace, cb) => {
+    const currentUser =  store.getState().currentUser;
+    if (currentUser.fbId) {
+      return cb();
+    }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+    replace('/');
+    cb();
+  };
 
-const render = (store) => () => {
+  return (
+    <Router history={hashHistory}>
+      <Route path='/' component={Layout(store)}>
+        <IndexRoute component={AppComponent} />
+        <Route path='categories' component={CategoriesComponent} onEnter={authencatedOnly} />
+        <Route path='settings' component={SettingsComponent} onEnter={authencatedOnly} />
+        <Route path='dashboard' component={DashboardComponent} onEnter={authencatedOnly} />
+      </Route>
+    </Router>
+  );
+};
+
+const render = (store, routes) => () => {
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      {routes}
     </Provider>,
     document.getElementById('root')
   );
-}
+};
 
-const update = render(store);
+const update = render(store, Routable(store));
 store.subscribe(update);
 update();
+
+store.dispatch(loginFacebook());

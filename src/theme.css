@@ -1,0 +1,117 @@
+html, body {
+  font-weight: 100;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+.navbar {
+  border-radius: 0;
+  border-width: 0;
+  box-shadow: inset 0 -5px 5px -3px rgba(0,0,0,0.2);
+}
+
+.navbar-nav > li > a.active {
+  background-color: white;
+}
+
+.btn:active,
+.btn:focus {
+  outline: none;
+}
+
+.panel.panel-default {
+  border: none;
+}
+
+.panel.panel-default > .panel-heading {
+  padding-left: 2px;
+  padding-right: 2px;
+
+  border: none;
+  border-bottom: 1px #ccc solid;
+
+  background: transparent;
+  font-weight: bold;
+}
+
+.pageview {
+  display: block;
+
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.pageview > .pageview-switch {
+  position: relative;
+  z-index: 1;
+  margin-bottom: -45px;
+  text-align: right;
+}
+
+.pageview > .pageview-track {
+  width: 200%;
+
+  -webkit-transition: transform 200ms;
+  -moz-transition: transform 200ms;
+  -ms-transition: transform 200ms;
+  -o-transition: transform 200ms;
+  transition: transform 200ms;;
+}
+
+.pageview-track > .pageview-item {
+  display: block;
+  float: left;
+
+  width: 50%;
+  padding: 0 15px;
+}
+
+.block-grid {
+
+}
+
+.block-grid:before,
+.block-grid:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.block-grid > .block-grid-item {
+  display: block;
+  float: left;
+
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 10px;
+}
+
+.block-grid.block-grid-upto-3 > .block-grid-item {
+  width: 33%;
+}
+
+.block-grid.block-grid-upto-3 > .block-grid-item:nth-child(3n+1) {
+  clear: both;
+}
+
+.list-group.list-group-entries .date {
+  display: inline-block;
+  min-width: 50px;
+}
+
+.text-lg {
+  font-size: 200%;
+}
+
+@media screen and (min-width: 768px) {
+  .text-center-sm {
+    text-align: center!important;
+  }
+}
